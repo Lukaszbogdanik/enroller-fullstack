@@ -34,8 +34,7 @@ public class MeetingRestController {
         return new ResponseEntity<Collection<Meeting>>(meetings, HttpStatus.OK);
     }
 
-	// jestesmy w meetings przez id
-	// w requestBody -- to jest to co przesylamy
+	
 	@RequestMapping(value="/{id}", method = RequestMethod.GET)
 	public ResponseEntity<?> getOneMeeting(@PathVariable("id") long id){
 		Meeting meeting = meetingService.findMeeteingById(id);
@@ -45,30 +44,21 @@ public class MeetingRestController {
 		return new ResponseEntity<Meeting>(meeting, HttpStatus.OK);
 	}	
 
-	// ADD
-	// POSTMAN
-	// POST
-	// http://localhost:8080/meetings/
-	// {
-    //     "id": 3,
-    //     "title": "some title3",
-    //     "description": "some description3",
-    //     "date": "some date3"
-    // }
+	
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public ResponseEntity<?> addMeeting(@RequestBody Meeting meeting){
-		// sprawdzamy czy istnieje meeting
+		// checking meetingu
 		Meeting findMeeting = meetingService.findMeeteingById(meeting.getId());
 		if (findMeeting != null){
 			return new ResponseEntity("Unable to create. A meeting with title " +meeting.getTitle() + " already exist.", HttpStatus.CONFLICT);
 		}
-		// dodanie meetingu
+		// Add meeting
 		meetingService.add(meeting);
 		return new ResponseEntity<Meeting>(meeting, HttpStatus.CREATED);
 	}
 
-	// DELETE
-	// http://localhost:8080/meetings/3
+	// usunicie
+	
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteMeeting(@PathVariable("id") long id){
 		Meeting meeting = meetingService.findMeeteingById(id);
@@ -79,13 +69,7 @@ public class MeetingRestController {
 		return new ResponseEntity<Meeting>(meeting, HttpStatus.OK);
 	}	
 
-	// UPDATE
-	// http://localhost:8080/meetings/5
-	// {
-    //     "title": "Update title8",
-    //     "description": "update description8",
-    //     "date": "update date8"
-    // }	
+	
 	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
 	public ResponseEntity<?> updateMeeting(@PathVariable("id") long id, @RequestBody Meeting incomingMeeting){
 
@@ -101,8 +85,7 @@ public class MeetingRestController {
 	}
 
 
-	// ADD participant to meeting
-	// http://localhost:8080/meetings/2/participants/user2
+	
 	@RequestMapping(value = "/{meetingId}/participants/{participantId}", method = RequestMethod.POST)
     public ResponseEntity<?> addParticipantToMeeting(@PathVariable("meetingId") long id,
                                                      @PathVariable("participantId") String participantId) {
@@ -121,8 +104,7 @@ public class MeetingRestController {
         return new ResponseEntity<Meeting>(meeting, HttpStatus.OK);
     }
 
-	// GET participants from meeting
-	// http://localhost:8080/meetings/2/participants
+	// get
     @RequestMapping(value = "/{id}/participants", method = RequestMethod.GET)
     public ResponseEntity<?> getMeetingParticipants(@PathVariable("id") long id) {
 
@@ -135,8 +117,7 @@ public class MeetingRestController {
     }
 
 
-	// DELETE
-	// http://localhost:8080/meetings/2/participants/user2
+	// Delete
 	@RequestMapping(value = "/{id}/participants/{participantId}", method = RequestMethod.DELETE)
     public ResponseEntity<?> removeParticipantFromMeeting(@PathVariable("id") long id,
 														@PathVariable("participantId") String participantId) {
@@ -155,8 +136,8 @@ public class MeetingRestController {
         return new ResponseEntity<Meeting>(meeting, HttpStatus.OK);
 	}
 	
-	// SORT
-	// http://localhost:8080/meetings/sortedByTitle
+	// sortuje
+	
 	@RequestMapping(value="/sortedByTitle", method = RequestMethod.GET)
 	public ResponseEntity<?> getMeetingSortedByTitle(){
 		Collection<Meeting> meetings = meetingService.getAllSorted();
@@ -164,7 +145,6 @@ public class MeetingRestController {
 	}
 
 	// SEARCH BY
-	// http://localhost:8080/meetings/searchByParticipant?id=user3
     @RequestMapping(value = "/searchByParticipant", method = RequestMethod.GET)
     public  ResponseEntity<?> searchMeetingsByParticipant2(@RequestParam String id) {
         Participant participant = participantService.findByLogin(id);
